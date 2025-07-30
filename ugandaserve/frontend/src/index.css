@@ -1,0 +1,200 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Poppins:wght@400;500;600;700;800&display=swap');
+
+/* Custom base styles */
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+  
+  body {
+    font-family: 'Inter', sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+  
+  h1, h2, h3, h4, h5, h6 {
+    font-family: 'Poppins', sans-serif;
+  }
+}
+
+/* Custom component styles */
+@layer components {
+  .btn-primary {
+    @apply bg-primary-500 hover:bg-primary-600 text-white font-medium py-2 px-4 rounded-lg transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2;
+  }
+  
+  .btn-secondary {
+    @apply bg-secondary-500 hover:bg-secondary-600 text-white font-medium py-2 px-4 rounded-lg transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-secondary-500 focus:ring-offset-2;
+  }
+  
+  .btn-outline {
+    @apply border border-primary-500 text-primary-500 hover:bg-primary-500 hover:text-white font-medium py-2 px-4 rounded-lg transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2;
+  }
+  
+  .card {
+    @apply bg-white rounded-lg shadow-md border border-gray-200 p-6;
+  }
+  
+  .card-hover {
+    @apply card hover:shadow-lg hover:shadow-primary-500/10 transition-shadow duration-300;
+  }
+  
+  .input-field {
+    @apply w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-colors duration-200;
+  }
+  
+  .hero-gradient {
+    background: linear-gradient(135deg, #22c55e 0%, #16a34a 50%, #15803d 100%);
+  }
+  
+  .uganda-gradient {
+    background: linear-gradient(45deg, #000000 0%, #FCDC00 50%, #D90000 100%);
+  }
+  
+  .text-gradient {
+    @apply bg-gradient-to-r from-primary-600 to-secondary-600 bg-clip-text text-transparent;
+  }
+  
+  .section-padding {
+    @apply py-12 md:py-20;
+  }
+  
+  .container-custom {
+    @apply max-w-7xl mx-auto px-4 sm:px-6 lg:px-8;
+  }
+}
+
+/* Custom utility styles */
+@layer utilities {
+  .text-shadow {
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+  
+  .text-shadow-lg {
+    text-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  }
+  
+  .bg-pattern {
+    background-image: 
+      radial-gradient(circle at 25px 25px, rgba(255,255,255,0.1) 2px, transparent 2px),
+      radial-gradient(circle at 75px 75px, rgba(255,255,255,0.1) 2px, transparent 2px);
+    background-size: 50px 50px;
+  }
+  
+  .scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+  
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
+  }
+  
+  /* Mobile-first responsive utilities */
+  .mobile-nav {
+    @apply fixed inset-x-0 top-0 z-50 bg-white/95 backdrop-blur-sm border-b border-gray-200;
+  }
+  
+  .mobile-menu {
+    @apply absolute top-full left-0 right-0 bg-white border-b border-gray-200 shadow-lg;
+  }
+}
+
+/* Loading spinner */
+.spinner {
+  border: 3px solid #f3f3f3;
+  border-top: 3px solid #22c55e;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* Star rating component */
+.star-rating {
+  display: inline-flex;
+  font-size: 1.2rem;
+}
+
+.star {
+  color: #d1d5db;
+  cursor: pointer;
+  transition: color 0.2s;
+}
+
+.star.filled {
+  color: #fbbf24;
+}
+
+.star:hover {
+  color: #fbbf24;
+}
+
+/* Image gallery styles */
+.image-gallery-slide img {
+  max-height: 400px;
+  object-fit: cover;
+}
+
+/* Map styles */
+.leaflet-container {
+  height: 300px;
+  border-radius: 0.5rem;
+}
+
+/* Custom scrollbar */
+.custom-scrollbar {
+  scrollbar-width: thin;
+  scrollbar-color: #22c55e #f1f5f9;
+}
+
+.custom-scrollbar::-webkit-scrollbar {
+  width: 6px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: #f1f5f9;
+  border-radius: 3px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: #22c55e;
+  border-radius: 3px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: #16a34a;
+}
+
+/* Notification styles */
+.toast-success {
+  @apply bg-primary-500 text-white;
+}
+
+.toast-error {
+  @apply bg-red-500 text-white;
+}
+
+.toast-warning {
+  @apply bg-accent-500 text-white;
+}
+
+/* Print styles */
+@media print {
+  .no-print {
+    display: none !important;
+  }
+  
+  .print-break {
+    page-break-after: always;
+  }
+}

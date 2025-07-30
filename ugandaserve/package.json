@@ -1,0 +1,22 @@
+{
+  "name": "ugandaserve",
+  "version": "1.0.0",
+  "description": "Uganda's premier service marketplace connecting clients with local service providers",
+  "main": "index.js",
+  "scripts": {
+    "dev": "concurrently \"npm run backend:dev\" \"npm run frontend:dev\"",
+    "backend:dev": "cd backend && npm run dev",
+    "frontend:dev": "cd frontend && npm run dev",
+    "backend:install": "cd backend && npm install",
+    "frontend:install": "cd frontend && npm install",
+    "install:all": "npm run backend:install && npm run frontend:install",
+    "build": "cd frontend && npm run build",
+    "start": "cd backend && npm start"
+  },
+  "keywords": ["marketplace", "uganda", "services", "booking", "mobile-money"],
+  "author": "UgandaServe Team",
+  "license": "MIT",
+  "devDependencies": {
+    "concurrently": "^8.2.2"
+  }
+}
