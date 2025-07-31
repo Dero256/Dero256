@@ -1,0 +1,18 @@
+{
+  "version": 2,
+  "builds": [
+    {
+      "src": "mix_generator_web.py",
+      "use": "@vercel/python"
+    }
+  ],
+  "routes": [
+    {
+      "src": "/(.*)",
+      "dest": "mix_generator_web.py"
+    }
+  ],
+  "env": {
+    "FLASK_ENV": "production"
+  }
+}

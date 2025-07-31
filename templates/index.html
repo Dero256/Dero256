@@ -1,0 +1,706 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Auto Music Mix & Play Generator</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: #333;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+            color: white;
+        }
+
+        .header h1 {
+            font-size: 3rem;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .header p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+
+        .main-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 30px;
+            margin-bottom: 30px;
+        }
+
+        .form-section, .preview-section {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+
+        .section-title {
+            font-size: 1.5rem;
+            margin-bottom: 20px;
+            color: #667eea;
+            border-bottom: 2px solid #667eea;
+            padding-bottom: 10px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #555;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e1e5e9;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: border-color 0.3s ease;
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+
+        .preset-buttons {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .preset-btn {
+            padding: 12px 20px;
+            border: none;
+            border-radius: 8px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            cursor: pointer;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            font-weight: 600;
+        }
+
+        .preset-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .generate-btn {
+            width: 100%;
+            padding: 15px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 1.2rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            margin-top: 20px;
+        }
+
+        .generate-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
+        }
+
+        .generate-btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .mix-preview {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 20px;
+            margin-top: 20px;
+        }
+
+        .track-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px;
+            background: white;
+            border-radius: 8px;
+            margin-bottom: 10px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        .track-info {
+            flex: 1;
+        }
+
+        .track-title {
+            font-weight: 600;
+            color: #333;
+        }
+
+        .track-details {
+            font-size: 0.9rem;
+            color: #666;
+        }
+
+        .export-buttons {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .export-btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.2s ease;
+        }
+
+        .export-btn.primary {
+            background: #28a745;
+            color: white;
+        }
+
+        .export-btn.secondary {
+            background: #6c757d;
+            color: white;
+        }
+
+        .export-btn:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 3px 10px rgba(0,0,0,0.2);
+        }
+
+        .loading {
+            display: none;
+            text-align: center;
+            padding: 20px;
+        }
+
+        .spinner {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #667eea;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 10px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .alert {
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+
+        .alert.success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .alert.error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+
+        .tag-input {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            padding: 8px;
+            border: 2px solid #e1e5e9;
+            border-radius: 8px;
+            min-height: 50px;
+        }
+
+        .tag {
+            background: #667eea;
+            color: white;
+            padding: 4px 8px;
+            border-radius: 15px;
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .tag-remove {
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .tag-input input {
+            border: none;
+            outline: none;
+            flex: 1;
+            min-width: 100px;
+        }
+
+        @media (max-width: 768px) {
+            .main-content {
+                grid-template-columns: 1fr;
+            }
+            
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+            
+            .header h1 {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1><i class="fas fa-music"></i> Auto Music Mix Generator</h1>
+            <p>Create seamless, continuous music mixes for any occasion</p>
+        </div>
+
+        <div class="main-content">
+            <div class="form-section">
+                <h2 class="section-title"><i class="fas fa-cog"></i> Mix Configuration</h2>
+                
+                <div class="preset-buttons" id="presetButtons">
+                    <!-- Preset buttons will be loaded here -->
+                </div>
+
+                <form id="mixForm">
+                    <div class="form-group">
+                        <label for="duration">Duration (minutes)</label>
+                        <input type="number" id="duration" class="form-control" value="30" min="5" max="180">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="mood_occasion">Mood/Occasion</label>
+                        <input type="text" id="mood_occasion" class="form-control" placeholder="e.g., workout, party, study">
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="source_type">Source Type</label>
+                            <select id="source_type" class="form-control">
+                                <option value="genre">Genre</option>
+                                <option value="playlist">Playlist</option>
+                                <option value="artists">Artists</option>
+                                <option value="ai_generated">AI Generated</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="source_value">Source Value</label>
+                            <input type="text" id="source_value" class="form-control" placeholder="e.g., EDM, House, Trap">
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="mixing_style">Mixing Style</label>
+                            <select id="mixing_style" class="form-control">
+                                <option value="beat_matched">Beat Matched</option>
+                                <option value="crossfaded">Crossfaded</option>
+                                <option value="reverb_washes">Reverb Washes</option>
+                                <option value="chopped_edits">Chopped Edits</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="energy_flow">Energy Flow</label>
+                            <select id="energy_flow" class="form-control">
+                                <option value="Build gradually to peak at 60%, then ease down">Build to 60% peak</option>
+                                <option value="Build gradually to peak at 80%, then maintain">Build to 80% peak</option>
+                                <option value="High energy throughout">High energy throughout</option>
+                                <option value="Gentle flow with subtle variations">Gentle flow</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="bpm_min">Min BPM</label>
+                            <input type="number" id="bpm_min" class="form-control" value="120" min="60" max="200">
+                        </div>
+                        <div class="form-group">
+                            <label for="bpm_max">Max BPM</label>
+                            <input type="number" id="bpm_max" class="form-control" value="130" min="60" max="200">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Avoid Elements</label>
+                        <div class="tag-input" id="avoidElements">
+                            <input type="text" placeholder="Type and press Enter">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Include Elements</label>
+                        <div class="tag-input" id="includeElements">
+                            <input type="text" placeholder="Type and press Enter">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label>
+                            <input type="checkbox" id="dynamic_adaptation">
+                            Enable Dynamic Adaptation
+                        </label>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="output_format">Output Format</label>
+                            <select id="output_format" class="form-control">
+                                <option value="single_file">Single File</option>
+                                <option value="real_time">Real-time Playback</option>
+                                <option value="tracklist">Tracklist Only</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="output_platform">Output Platform</label>
+                            <select id="output_platform" class="form-control">
+                                <option value="">Local File</option>
+                                <option value="spotify">Spotify</option>
+                                <option value="youtube">YouTube</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="generate-btn" id="generateBtn">
+                        <i class="fas fa-magic"></i> Generate Mix
+                    </button>
+                </form>
+
+                <div class="loading" id="loading">
+                    <div class="spinner"></div>
+                    <p>Generating your mix...</p>
+                </div>
+            </div>
+
+            <div class="preview-section">
+                <h2 class="section-title"><i class="fas fa-play-circle"></i> Mix Preview</h2>
+                
+                <div id="alertContainer"></div>
+                
+                <div id="mixPreview" class="mix-preview" style="display: none;">
+                    <h3>Generated Mix</h3>
+                    <div id="trackList">
+                        <!-- Track list will be populated here -->
+                    </div>
+                    
+                    <div class="export-buttons">
+                        <button class="export-btn primary" id="exportMixBtn">
+                            <i class="fas fa-download"></i> Export Mix
+                        </button>
+                        <button class="export-btn secondary" id="downloadTracklistBtn">
+                            <i class="fas fa-list"></i> Download Tracklist
+                        </button>
+                    </div>
+                </div>
+                
+                <div id="emptyPreview" class="mix-preview">
+                    <p style="text-align: center; color: #666;">
+                        <i class="fas fa-music" style="font-size: 3rem; margin-bottom: 20px; display: block;"></i>
+                        Configure your mix settings and click "Generate Mix" to create your perfect playlist
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Global variables
+        let currentMix = null;
+        let avoidTags = [];
+        let includeTags = [];
+
+        // Initialize the application
+        document.addEventListener('DOMContentLoaded', function() {
+            loadPresets();
+            setupTagInputs();
+            setupEventListeners();
+        });
+
+        // Load preset buttons
+        async function loadPresets() {
+            try {
+                const response = await fetch('/api/presets');
+                const presets = await response.json();
+                
+                const container = document.getElementById('presetButtons');
+                container.innerHTML = '';
+                
+                Object.entries(presets).forEach(([key, preset]) => {
+                    const button = document.createElement('button');
+                    button.type = 'button';
+                    button.className = 'preset-btn';
+                    button.textContent = preset.name;
+                    button.onclick = () => loadPreset(preset);
+                    container.appendChild(button);
+                });
+            } catch (error) {
+                console.error('Error loading presets:', error);
+            }
+        }
+
+        // Load a preset
+        function loadPreset(preset) {
+            document.getElementById('duration').value = preset.duration;
+            document.getElementById('mood_occasion').value = preset.mood_occasion;
+            document.getElementById('source_type').value = preset.source_type;
+            document.getElementById('source_value').value = preset.source_value;
+            document.getElementById('mixing_style').value = preset.mixing_style;
+            document.getElementById('energy_flow').value = preset.energy_flow;
+            document.getElementById('bpm_min').value = preset.bpm_range[0];
+            document.getElementById('bpm_max').value = preset.bpm_range[1];
+            
+            // Load tags
+            avoidTags = preset.avoid_elements || [];
+            includeTags = preset.include_elements || [];
+            updateTagDisplay();
+        }
+
+        // Setup tag input functionality
+        function setupTagInputs() {
+            setupTagInput('avoidElements', avoidTags);
+            setupTagInput('includeElements', includeTags);
+        }
+
+        function setupTagInput(containerId, tagsArray) {
+            const container = document.getElementById(containerId);
+            const input = container.querySelector('input');
+            
+            input.addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') {
+                    e.preventDefault();
+                    const value = this.value.trim();
+                    if (value && !tagsArray.includes(value)) {
+                        tagsArray.push(value);
+                        updateTagDisplay();
+                        this.value = '';
+                    }
+                }
+            });
+        }
+
+        function updateTagDisplay() {
+            updateTagContainer('avoidElements', avoidTags);
+            updateTagContainer('includeElements', includeTags);
+        }
+
+        function updateTagContainer(containerId, tags) {
+            const container = document.getElementById(containerId);
+            const input = container.querySelector('input');
+            
+            // Clear existing tags
+            const existingTags = container.querySelectorAll('.tag');
+            existingTags.forEach(tag => tag.remove());
+            
+            // Add new tags
+            tags.forEach(tag => {
+                const tagElement = document.createElement('span');
+                tagElement.className = 'tag';
+                tagElement.innerHTML = `
+                    ${tag}
+                    <span class="tag-remove" onclick="removeTag('${containerId}', '${tag}')">&times;</span>
+                `;
+                container.insertBefore(tagElement, input);
+            });
+        }
+
+        function removeTag(containerId, tag) {
+            if (containerId === 'avoidElements') {
+                avoidTags = avoidTags.filter(t => t !== tag);
+            } else if (containerId === 'includeElements') {
+                includeTags = includeTags.filter(t => t !== tag);
+            }
+            updateTagDisplay();
+        }
+
+        // Setup event listeners
+        function setupEventListeners() {
+            document.getElementById('mixForm').addEventListener('submit', generateMix);
+            document.getElementById('exportMixBtn').addEventListener('click', exportMix);
+            document.getElementById('downloadTracklistBtn').addEventListener('click', downloadTracklist);
+        }
+
+        // Generate mix
+        async function generateMix(e) {
+            e.preventDefault();
+            
+            const generateBtn = document.getElementById('generateBtn');
+            const loading = document.getElementById('loading');
+            
+            generateBtn.disabled = true;
+            loading.style.display = 'block';
+            
+            try {
+                const formData = {
+                    duration: document.getElementById('duration').value,
+                    mood_occasion: document.getElementById('mood_occasion').value,
+                    source_type: document.getElementById('source_type').value,
+                    source_value: document.getElementById('source_value').value,
+                    mixing_style: document.getElementById('mixing_style').value,
+                    energy_flow: document.getElementById('energy_flow').value,
+                    bpm_min: document.getElementById('bpm_min').value,
+                    bpm_max: document.getElementById('bpm_max').value,
+                    avoid_elements: avoidTags,
+                    include_elements: includeTags,
+                    dynamic_adaptation: document.getElementById('dynamic_adaptation').checked,
+                    output_format: document.getElementById('output_format').value,
+                    output_platform: document.getElementById('output_platform').value
+                };
+                
+                const response = await fetch('/generate_mix', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(formData)
+                });
+                
+                const result = await response.json();
+                
+                if (result.success) {
+                    currentMix = result.mix;
+                    showAlert('Mix generated successfully!', 'success');
+                    displayMixPreview(result.mix);
+                } else {
+                    showAlert(result.error, 'error');
+                }
+            } catch (error) {
+                showAlert('Error generating mix: ' + error.message, 'error');
+            } finally {
+                generateBtn.disabled = false;
+                loading.style.display = 'none';
+            }
+        }
+
+        // Display mix preview
+        function displayMixPreview(mix) {
+            const preview = document.getElementById('mixPreview');
+            const emptyPreview = document.getElementById('emptyPreview');
+            const trackList = document.getElementById('trackList');
+            
+            trackList.innerHTML = '';
+            
+            mix.timestamps.forEach((track, index) => {
+                const trackElement = document.createElement('div');
+                trackElement.className = 'track-item';
+                trackElement.innerHTML = `
+                    <div class="track-info">
+                        <div class="track-title">${track.track_title}</div>
+                        <div class="track-details">
+                            ${track.timestamp} • ${track.bpm} BPM • ${track.artist}
+                        </div>
+                    </div>
+                `;
+                trackList.appendChild(trackElement);
+            });
+            
+            emptyPreview.style.display = 'none';
+            preview.style.display = 'block';
+        }
+
+        // Export mix
+        async function exportMix() {
+            if (!currentMix) {
+                showAlert('No mix available for export', 'error');
+                return;
+            }
+            
+            try {
+                const response = await fetch('/export_mix', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        output_format: document.getElementById('output_format').value
+                    })
+                });
+                
+                const result = await response.json();
+                
+                if (result.success) {
+                    showAlert(result.message, 'success');
+                } else {
+                    showAlert(result.error, 'error');
+                }
+            } catch (error) {
+                showAlert('Error exporting mix: ' + error.message, 'error');
+            }
+        }
+
+        // Download tracklist
+        async function downloadTracklist() {
+            if (!currentMix) {
+                showAlert('No mix available', 'error');
+                return;
+            }
+            
+            try {
+                window.location.href = '/download_tracklist';
+            } catch (error) {
+                showAlert('Error downloading tracklist: ' + error.message, 'error');
+            }
+        }
+
+        // Show alert
+        function showAlert(message, type) {
+            const container = document.getElementById('alertContainer');
+            const alert = document.createElement('div');
+            alert.className = `alert ${type}`;
+            alert.textContent = message;
+            
+            container.innerHTML = '';
+            container.appendChild(alert);
+            
+            setTimeout(() => {
+                alert.remove();
+            }, 5000);
+        }
+    </script>
+</body>
+</html>
