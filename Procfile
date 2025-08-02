@@ -1,0 +1,1 @@
+web: python mix_generator_web.py
