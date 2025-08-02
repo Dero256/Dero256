@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ICEA LION Uganda - Endowment with Profits</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%);
+            color: white;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            position: relative;
+        }
+
+        /* Header */
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 0;
+            position: relative;
+            z-index: 10;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .logo-icon {
+            width: 50px;
+            height: 50px;
+            background: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            color: #1e3a8a;
+        }
+
+        .logo-text h1 {
+            font-size: 24px;
+            font-weight: 700;
+            margin: 0;
+        }
+
+        .logo-text p {
+            font-size: 12px;
+            opacity: 0.8;
+            margin: 0;
+        }
+
+        .tagline {
+            font-size: 14px;
+            font-weight: 500;
+            opacity: 0.9;
+        }
+
+        /* Main Content */
+        .main-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 60px;
+            align-items: center;
+            min-height: 70vh;
+            position: relative;
+        }
+
+        .content-left {
+            z-index: 5;
+        }
+
+        .headline {
+            font-size: 3.5rem;
+            font-weight: 800;
+            color: #fbbf24;
+            margin-bottom: 30px;
+            line-height: 1.1;
+        }
+
+        .description {
+            font-size: 1.2rem;
+            line-height: 1.6;
+            margin-bottom: 40px;
+            opacity: 0.95;
+        }
+
+        .highlight {
+            font-weight: 700;
+            color: #fbbf24;
+        }
+
+        .cta-button {
+            display: inline-block;
+            background: #fbbf24;
+            color: #1e3a8a;
+            padding: 15px 30px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 1.1rem;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(251, 191, 36, 0.3);
+        }
+
+        .cta-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(251, 191, 36, 0.4);
+        }
+
+        /* Right Side Visual Elements */
+        .content-right {
+            position: relative;
+            height: 500px;
+        }
+
+        .man-image {
+            position: absolute;
+            right: 0;
+            top: 50px;
+            width: 300px;
+            height: 400px;
+            background: linear-gradient(45deg, #2563eb, #1d4ed8);
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 80px;
+            color: white;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        }
+
+        .thought-bubble {
+            position: absolute;
+            right: 320px;
+            top: 30px;
+            width: 60px;
+            height: 60px;
+            background: #3b82f6;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            color: white;
+            animation: float 3s ease-in-out infinite;
+        }
+
+        .car-image {
+            position: absolute;
+            right: 50px;
+            bottom: 0;
+            width: 350px;
+            height: 200px;
+            background: linear-gradient(45deg, #1e40af, #3b82f6);
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 60px;
+            color: white;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+        }
+
+        .question-mark {
+            position: absolute;
+            right: 20px;
+            bottom: 220px;
+            width: 80px;
+            height: 80px;
+            background: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 40px;
+            color: #1e3a8a;
+            font-weight: 700;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .plan-text {
+            position: absolute;
+            right: 110px;
+            bottom: 240px;
+            font-size: 14px;
+            font-weight: 600;
+            color: white;
+            writing-mode: vertical-rl;
+            text-orientation: mixed;
+        }
+
+        /* Footer */
+        .footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 30px 0;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            margin-top: 40px;
+        }
+
+        .contact-info {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .contact-info a {
+            color: white;
+            text-decoration: none;
+            font-size: 14px;
+            opacity: 0.9;
+            transition: opacity 0.3s ease;
+        }
+
+        .contact-info a:hover {
+            opacity: 1;
+        }
+
+        .contact-info i {
+            margin-right: 8px;
+            color: #fbbf24;
+        }
+
+        /* Animations */
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .main-content {
+                grid-template-columns: 1fr;
+                gap: 40px;
+                text-align: center;
+            }
+
+            .headline {
+                font-size: 2.5rem;
+            }
+
+            .content-right {
+                height: 400px;
+                order: -1;
+            }
+
+            .man-image {
+                width: 250px;
+                height: 300px;
+                right: 50%;
+                transform: translateX(50%);
+            }
+
+            .thought-bubble {
+                right: 50%;
+                transform: translateX(50%);
+                margin-right: 150px;
+            }
+
+            .car-image {
+                width: 280px;
+                height: 160px;
+                right: 50%;
+                transform: translateX(50%);
+            }
+
+            .question-mark {
+                right: 50%;
+                transform: translateX(50%);
+                margin-right: 180px;
+            }
+
+            .plan-text {
+                right: 50%;
+                transform: translateX(50%);
+                margin-right: 120px;
+                writing-mode: horizontal-tb;
+            }
+
+            .header {
+                flex-direction: column;
+                gap: 20px;
+            }
+
+            .footer {
+                flex-direction: column;
+                gap: 20px;
+                text-align: center;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .container {
+                padding: 15px;
+            }
+
+            .headline {
+                font-size: 2rem;
+            }
+
+            .description {
+                font-size: 1rem;
+            }
+
+            .man-image {
+                width: 200px;
+                height: 250px;
+            }
+
+            .car-image {
+                width: 220px;
+                height: 120px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <header class="header">
+            <div class="logo">
+                <div class="logo-icon">
+                    <i class="fas fa-lion"></i>
+                </div>
+                <div class="logo-text">
+                    <h1>ICEA LION</h1>
+                    <p>UGANDA</p>
+                </div>
+            </div>
+            <div class="tagline">WE'RE BETTER TOGETHER</div>
+        </header>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <div class="content-left">
+                <h1 class="headline">READY TO UPGRADE?</h1>
+                <p class="description">
+                    With competitive interest rates and life cover, you can save for your long-term goals worry-free using the <span class="highlight">Endowment with Profits</span> plan.
+                </p>
+                <a href="#contact" class="cta-button">Get Started Today</a>
+            </div>
+
+            <div class="content-right">
+                <div class="thought-bubble">
+                    <i class="fas fa-thumbs-up"></i>
+                </div>
+                <div class="man-image">
+                    <i class="fas fa-user-tie"></i>
+                </div>
+                <div class="question-mark">?</div>
+                <div class="plan-text">WHAT'S YOUR PLAN</div>
+                <div class="car-image">
+                    <i class="fas fa-car"></i>
+                </div>
+            </div>
+        </main>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <div class="contact-info">
+                <a href="https://plan.icealion.co.ug" target="_blank">
+                    <i class="fas fa-globe"></i>Visit: plan.icealion.co.ug
+                </a>
+                <a href="tel:0800300412">
+                    <i class="fas fa-phone"></i>Call: 0800 300 412/411
+                </a>
+            </div>
+        </footer>
+    </div>
+
+    <script>
+        // Add some interactive effects
+        document.addEventListener('DOMContentLoaded', function() {
+            // Smooth scroll for CTA button
+            document.querySelector('.cta-button').addEventListener('click', function(e) {
+                e.preventDefault();
+                document.querySelector('.footer').scrollIntoView({
+                    behavior: 'smooth'
+                });
+            });
+
+            // Add hover effects to visual elements
+            const manImage = document.querySelector('.man-image');
+            const carImage = document.querySelector('.car-image');
+
+            manImage.addEventListener('mouseenter', function() {
+                this.style.transform = 'scale(1.05)';
+            });
+
+            manImage.addEventListener('mouseleave', function() {
+                this.style.transform = 'scale(1)';
+            });
+
+            carImage.addEventListener('mouseenter', function() {
+                this.style.transform = 'scale(1.05)';
+            });
+
+            carImage.addEventListener('mouseleave', function() {
+                this.style.transform = 'scale(1)';
+            });
+        });
+    </script>
+</body>
+</html>
